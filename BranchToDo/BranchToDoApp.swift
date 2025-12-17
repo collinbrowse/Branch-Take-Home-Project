@@ -14,20 +14,8 @@ struct BranchToDoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ListView(context: persistenceController.container.viewContext)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .onAppear {
-                    Task {
-                        do {
-                            let todos = try await TodoAPIService.fetchTodos()
-                            for todo in todos {
-                                print(todo)
-                            }
-                        } catch {
-                            print("Error getting the todos: \(error.localizedDescription)")
-                        }
-                    }
-                }
         }
     }
 }

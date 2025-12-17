@@ -31,8 +31,8 @@ struct JSONRequestConfig {
     
     static func buildRequest(with requestConfig: JSONRequestConfig) -> URLRequest? {
         
-        guard var url = requestConfig.fullURL else {
-            print("Did not create request url")
+        guard let url = requestConfig.fullURL else {
+            TodoErrorLogger.logMessage("Did not create request url")
             return nil
         }
         

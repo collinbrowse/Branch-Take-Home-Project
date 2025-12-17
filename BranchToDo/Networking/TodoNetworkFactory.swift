@@ -20,7 +20,7 @@ class TodoNetworkFactory {
             throw TodoNetworkError.invalidRequestStructure
         }
                 
-        return try await URLSession.shared.data(for: request)
+        return try await session.data(for: request)
     }
 }
 
