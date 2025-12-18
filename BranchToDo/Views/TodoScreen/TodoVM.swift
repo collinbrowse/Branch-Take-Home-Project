@@ -1,16 +1,17 @@
 //
-//  TodoListVM.swift
+//  TodoVM.swift
 //  BranchToDo
 //
-//  Created by Collin Browse on 12/17/25.
+//  Created by Collin Browse on 12/18/25.
 //
+
 
 import SwiftUI
 import Combine
 import CoreData
 
 @MainActor
-class ListVM: ObservableObject {
+class TodoVM: ObservableObject {
     
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
@@ -28,6 +29,8 @@ class ListVM: ObservableObject {
                     deleteCurrentTodo()
                 }
                 currentTodo = nil
+                newTitle = ""
+                errorMessage = nil
             }
         }
     }
@@ -53,9 +56,9 @@ class ListVM: ObservableObject {
         let newTodo = Todo(context: viewContext)
         newTodo.completed = false
         newTodo.createdAt = Date.now
-        newTodo.id = generateInt32ID()
+        newTodo.id = Int32.randomInt32Id()
         newTodo.title = ""
-        newTodo.userId = generateInt32ID()
+        newTodo.userId = Int32.randomInt32Id()
         currentTodo = newTodo
     }
     
@@ -71,9 +74,9 @@ class ListVM: ObservableObject {
             let newTodo = Todo(context: viewContext)
             newTodo.completed = false
             newTodo.createdAt = Date.now
-            newTodo.id = generateInt32ID()
+            newTodo.id = Int32.randomInt32Id()
             newTodo.title = title
-            newTodo.userId = generateInt32ID()
+            newTodo.userId = Int32.randomInt32Id()
         }
     }
     
@@ -118,6 +121,8 @@ class ListVM: ObservableObject {
     
     
     func fetchTodosFromAPI() async {
+        isLoading = true
+        errorMessage = nil
         do {
             let todos = try await TodoAPIService.fetchTodos()
             
@@ -125,14 +130,22 @@ class ListVM: ObservableObject {
                 addTodo(todo)
             }
             
-            saveViewContext()
+            withAnimation(.easeInOut) {
+                self.isLoading = false
+                self.saveViewContext()
+            }
         } catch {
             TodoErrorLogger.logMessage("Error getting the todos: \(error.localizedDescription)")
+            withAnimation(.easeInOut) {
+                self.errorMessage = error.localizedDescription
+                self.isLoading = false
+            }
         }
     }
-    
-    // MARK: - Helpers
-    func generateInt32ID() -> Int32 {
-        Int32.random(in: Int32.min...Int32.max)
+}
+
+extension Int32 {
+    public static func randomInt32Id() -> Int32 {
+        return Int32.random(in: Int32.min...Int32.max)
     }
 }

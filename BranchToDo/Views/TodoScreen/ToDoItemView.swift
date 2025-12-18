@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ToDoItemView: View {
     
-    var todo: Todo
+    @ObservedObject var todo: Todo
     var onToggleCompletion: () -> Void
     
     private let itemFormatter: DateFormatter = {

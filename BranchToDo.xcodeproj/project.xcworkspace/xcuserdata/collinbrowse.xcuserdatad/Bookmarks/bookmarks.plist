@@ -10,15 +10,15 @@
 				<key>location-parameters</key>
 				<dict>
 					<key>EndingColumnNumber</key>
-					<string>48</string>
+					<string>0</string>
 					<key>EndingLineNumber</key>
-					<string>38</string>
+					<string>26</string>
 					<key>StartingColumnNumber</key>
-					<string>28</string>
+					<string>0</string>
 					<key>StartingLineNumber</key>
-					<string>37</string>
+					<string>25</string>
 					<key>Timestamp</key>
-					<string>787704614.924219</string>
+					<string>787784848.031516</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>
@@ -34,16 +34,16 @@
 			<key>text-context</key>
 			<dict>
 				<key>focused</key>
-				<string>
-                        ToDoItemView(todo: todo,</string>
+				<string>                } else {
+</string>
 				<key>leading</key>
-				<string>                                viewModel.isEditing = false
-                            }
-                    } else {</string>
+				<string>                            viewModel.isEditing = false
+                        }
+</string>
 				<key>trailing</key>
-				<string> onToggleCompletion: {
-                            viewModel.toggleTodoCompletion(todo)
-                        })
+				<string>                    ToDoItemView(todo: todo, onToggleCompletion: {
+                        viewModel.toggleTodoCompletion(todo)
+                    })
 </string>
 			</dict>
 			<key>title</key>
@@ -65,7 +65,7 @@
 					<key>StartingLineNumber</key>
 					<string>124</string>
 					<key>Timestamp</key>
-					<string>787705080.37672</string>
+					<string>787772189.638744</string>
 				</dict>
 				<key>rebasable-url</key>
 				<dict>

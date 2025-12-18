@@ -18,7 +18,7 @@ class TodoErrorLogger {
     }
     
     static func logMessage(_ message: String) {
-        os_log("⚠️ Todo message", message)
+        logger.info("⚠️ Todo message \(message)")
     }
 }
 
