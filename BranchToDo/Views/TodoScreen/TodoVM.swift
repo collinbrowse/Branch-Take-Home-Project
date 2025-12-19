@@ -13,139 +13,134 @@ import CoreData
 @MainActor
 class TodoVM: ObservableObject {
     
+    @Published var currentTodoId: NSManagedObjectID?
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var isEditing: Bool = false {
         didSet {
-            // If we are now editing, add empty todo
             if isEditing {
                 addEmptyTodo()
             }
-            // If we are done editing, remove editing details
             else {
-                if currentTodo?.title != "" {
-                    saveViewContext()
-                } else {
-                    deleteCurrentTodo()
-                }
-                currentTodo = nil
-                newTitle = ""
-                errorMessage = nil
+                finishEditing()
             }
         }
     }
-    @Published var newTitle: String = "" {
+    @Published var newTitle: String? {
         didSet {
-            if newTitle != "" {
-                updateCurrentTodo()
+            // Update the todo title in Core Data as user types
+            if let title = newTitle,
+                let objectId = currentTodoId {
+                updateTodoTitle(objectId: objectId, title: title)
             }
         }
     }
-    private var viewContext: NSManagedObjectContext
-    @Published var currentTodo: Todo?
-    //    private var todoRepository: TodoRepositoryProtocol
-    //    private var apiService: TodoAPIService
     
-    init(context: NSManagedObjectContext ) {
-        self.viewContext = context
+    private var repository: TodoRepositoryProtocol
+    
+    init(repo: TodoRepositoryProtocol) {
+        self.repository = repo
     }
 
     // MARK: - CRUD Operations
     
     func addEmptyTodo() {
-        let newTodo = Todo(context: viewContext)
-        newTodo.completed = false
-        newTodo.createdAt = Date.now
-        newTodo.id = Int32.randomInt32Id()
-        newTodo.title = ""
-        newTodo.userId = Int32.randomInt32Id()
-        currentTodo = newTodo
-    }
-    
-    
-    func updateCurrentTodo() {
-        currentTodo?.title = newTitle
-        saveViewContext()
-    }
-    
-    /// Save user-added Todo to Core Data
-    func addTodo(title: String) {
-        withAnimation {
-            let newTodo = Todo(context: viewContext)
-            newTodo.completed = false
-            newTodo.createdAt = Date.now
-            newTodo.id = Int32.randomInt32Id()
-            newTodo.title = title
-            newTodo.userId = Int32.randomInt32Id()
-        }
-    }
-    
-    /// Save Todo from API to Core Data
-    func addTodo(_ todo: TodoDTO) {
-        let newTodo = Todo(context: viewContext)
-        newTodo.completed = todo.completed
-        newTodo.createdAt = todo.createdAt
-        newTodo.id = Int32(todo.id)
-        newTodo.title = todo.title
-        newTodo.userId = Int32(todo.userId)
-    }
-    
-    @MainActor
-    func saveViewContext() {
         do {
-            try viewContext.save()
+            let objectID = try repository.createEmptyTodo()
+            currentTodoId = objectID
+            newTitle = ""
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            TodoErrorLogger.logMessage("Error creating empty todo: \(error.localizedDescription)")
+            withAnimation(.easeInOut) {
+                self.errorMessage = "Unable to create new todo"
+                self.isLoading = false
+            }
         }
     }
     
-    func deleteCurrentTodo() {
-        if let todo = currentTodo {
-            viewContext.delete(todo)
-            saveViewContext()
+    func finishEditing() {
+        if let objectId = currentTodoId {
+            do {
+                let todo = try repository.getTodo(objectId: objectId)
+                // If it's a valid title (not an empty string)
+                if let title = todo.title, !title.trimmingCharacters(in: .whitespaces).isEmpty {
+                    // Save the view context to persist the new todo
+                    try repository.save()
+                } else {
+                    try repository.deleteTodo(objectId: objectId)
+                    try repository.save()
+                }
+            } catch {
+                TodoErrorLogger.logMessage("Error finishing editing: \(error.localizedDescription)")
+                withAnimation(.easeInOut) {
+                    self.errorMessage = "Unable to finish editing"
+                    self.isLoading = false
+                }
+            }
         }
-    }
-    
-    func deleteTodos(_ items: [Todo]) {
-        items.forEach(viewContext.delete)
-        saveViewContext()
-    }
-    
-    func toggleTodoCompletion(_ todo: Todo) {
-        todo.completed.toggle()
-        saveViewContext()
-    }
-    
-    
-    func fetchTodosFromAPI() async {
-        isLoading = true
+        isLoading = false
+        currentTodoId = nil
+        newTitle = nil
         errorMessage = nil
+    }
+    
+    func deleteTodo(objectId: NSManagedObjectID) {
         do {
-            let todos = try await TodoAPIService.fetchTodos()
-            
-            for todo in todos {
-                addTodo(todo)
-            }
-            
-            withAnimation(.easeInOut) {
-                self.isLoading = false
-                self.saveViewContext()
-            }
+            try repository.deleteTodo(objectId: objectId)
+            try repository.save()
         } catch {
-            TodoErrorLogger.logMessage("Error getting the todos: \(error.localizedDescription)")
+            TodoErrorLogger.logMessage("Error deleting the todo: \(error.localizedDescription)")
             withAnimation(.easeInOut) {
-                self.errorMessage = error.localizedDescription
+                self.errorMessage = "Error deleting your entry"
                 self.isLoading = false
             }
         }
     }
-}
-
-extension Int32 {
-    public static func randomInt32Id() -> Int32 {
-        return Int32.random(in: Int32.min...Int32.max)
+    
+    func toggleCompletion(objectId: NSManagedObjectID) {
+        do {
+            try repository.toggleCompletion(objectId: objectId)
+            try repository.save()
+        } catch {
+            TodoErrorLogger.logMessage("Error updating the todo completion status: \(error.localizedDescription)")
+            withAnimation(.easeInOut) {
+                self.errorMessage = "Error updating your entry"
+                self.isLoading = false
+            }
+        }
+    }
+    
+    func updateTodoTitle(objectId: NSManagedObjectID, title: String) {
+        // Valdiate the input first
+        let sanitizedTitle = TitleSanitizer.sanitize(title)
+        guard sanitizedTitle != "" else {
+            errorMessage = "Please enter a valid input"
+            return
+        }
+        
+        // Save if valid
+        do {
+            try repository.updateTodoTitle(objectId: objectId, title: title)
+        } catch {
+            TodoErrorLogger.logMessage("Error updating todo title: \(error.localizedDescription)")
+        }
+    }
+    
+    /// Fetch a list of Demo Todos from the network
+    func fetchDemoTodos() {
+        Task {
+            isLoading = true
+            errorMessage = nil
+            do {
+                try await repository.fetchDemoTodosAndSave()
+                isLoading = false
+            } catch {
+                TodoErrorLogger.logMessage("Error getting the todos: \(error.localizedDescription)")
+                withAnimation(.easeInOut) {
+                    self.errorMessage = "Unable to load examples from the network: \(error.localizedDescription)"
+                    self.isLoading = false
+                }
+            }
+        }
     }
 }

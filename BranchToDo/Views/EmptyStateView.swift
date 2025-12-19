@@ -21,9 +21,8 @@ struct EmptyStateView: View {
             Text("OR")
                 .font(.headline)
             Button {
-                Task {
-                    await viewModel.fetchTodosFromAPI()
-                }
+                // One time call to populate core data with demo todos
+                viewModel.fetchDemoTodos()
             } label: {
                 Text("Load Demo Todo Items")
                     .foregroundStyle(.primary)
@@ -43,5 +42,8 @@ struct EmptyStateView: View {
 }
 
 #Preview {
-    EmptyStateView(viewModel: TodoVM(context: PersistenceController.preview.container.viewContext))
+    let container = PersistenceController.preview.container
+    let repo = CoreDataRepository(container: container)
+    let vm = TodoVM(repo: repo)
+    EmptyStateView(viewModel: vm)
 }

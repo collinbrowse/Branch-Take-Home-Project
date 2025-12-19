@@ -11,15 +11,15 @@ import CoreData
 struct TodoScreen: View {
     
     @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(fetchRequest: TodoRepository.getAllTodos())
-    private var todos: FetchedResults<Todo>
+    @FetchRequest(
+        sortDescriptors: [],
+        animation: .default
+    ) private var allTodos: FetchedResults<Todo>
     
     @StateObject private var viewModel: TodoVM
-    @FocusState private var isFocused: Bool
 
-    init(context: NSManagedObjectContext) {
-        _viewModel = StateObject(wrappedValue: TodoVM(context: context))
+    init(viewModel: TodoVM) {
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -32,10 +32,10 @@ struct TodoScreen: View {
                 )
                 .ignoresSafeArea()
                 
-                if todos.isEmpty {
+                if allTodos.isEmpty && !viewModel.isLoading {
                     EmptyStateView(viewModel: viewModel)
                 } else {
-                    ListView(todos: Array(todos), viewModel: viewModel, isFocused: $isFocused)
+                    ListView(viewModel: viewModel)
                 }
             }
             .toolbar {
@@ -43,9 +43,6 @@ struct TodoScreen: View {
                     Button {
                         withAnimation {
                             viewModel.isEditing.toggle()
-                            if viewModel.isEditing {
-                                isFocused = true
-                            }
                         }
                     } label: {
                         if viewModel.isEditing {
@@ -64,6 +61,7 @@ struct TodoScreen: View {
 }
 
 #Preview {
-    TodoScreen(context: PersistenceController.preview.container.viewContext)
+    let container = PersistenceController.preview.container
+    TodoScreen(viewModel: TodoVM(repo: CoreDataRepository(container: container)))
 }
 

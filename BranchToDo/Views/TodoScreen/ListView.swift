@@ -1,38 +1,52 @@
 //
-//  ContentView.swift
+//  ListView.swift
 //  BranchToDo
 //
 //  Created by Collin Browse on 12/17/25.
 //
 
 import SwiftUI
+import CoreData
 
 struct ListView: View {
     
-    var todos: [Todo]
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Todo.createdAt, ascending: false)
+        ],
+        predicate: NSPredicate(format: "createdAt != nil"),
+        animation: .default
+    ) private var todosWithDates: FetchedResults<Todo>
+    
+    @FetchRequest(
+        sortDescriptors: [],
+        predicate: NSPredicate(format: "createdAt == nil"),
+        animation: .default
+    ) private var todosWithoutDates: FetchedResults<Todo>
+    
     @ObservedObject var viewModel: TodoVM
-    var isFocused: FocusState<Bool>.Binding
+    
+    private var allTodos: [Todo] {
+        Array(todosWithDates) + Array(todosWithoutDates)
+    }
     
     var body: some View {
         List {
-            ForEach(todos) { todo in
-                if todo == viewModel.currentTodo {
-                    TextField("", text: $viewModel.newTitle)
-                        .focused(isFocused)
-                        .font(.headline)
-                        .onSubmit {
-                            viewModel.isEditing = false
-                        }
-                } else {
-                    ToDoItemView(todo: todo, onToggleCompletion: {
-                        viewModel.toggleTodoCompletion(todo)
-                    })
-                }
+            ForEach(allTodos) { todo in
+                TodoItemView(
+                    todo: todo,
+                    viewModel: viewModel,
+                    isCurrentTodo: todo.objectID == viewModel.currentTodoId,
+                    onToggleCompletion: {
+                        viewModel.toggleCompletion(objectId: todo.objectID)
+                    }
+                )
             }
             .onDelete { offsets in
-                withAnimation {
-                    let itemsToDelete: [Todo] = offsets.map { self.todos[$0] }
-                    viewModel.deleteTodos(itemsToDelete)
+                for index in offsets {
+                    let todo = allTodos[index]
+                    viewModel.deleteTodo(objectId: todo.objectID)
                 }
             }
         }
@@ -48,6 +62,10 @@ private let itemFormatter: DateFormatter = {
 }()
 
 #Preview {
-//    ListView(todos: [], viewModel: TodoVM(context: PersistenceController.preview.container.viewContext), isFocused: FocusState())
+    let container = PersistenceController.preview.container
+    let repo = CoreDataRepository(container: container)
+    let vm = TodoVM(repo: repo)
+    ListView(viewModel: vm)
+        .environment(\.managedObjectContext, container.viewContext)
 }
 

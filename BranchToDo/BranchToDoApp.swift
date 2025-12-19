@@ -10,12 +10,22 @@ import CoreData
 
 @main
 struct BranchToDoApp: App {
+    
     let persistenceController = PersistenceController.shared
-
+    let container: NSPersistentContainer
+    let repository: TodoRepositoryProtocol
+    
+    init() {
+        container = PersistenceController.shared.container
+        repository = CoreDataRepository(container: container)
+    }
+    
     var body: some Scene {
         WindowGroup {
-            TodoScreen(context: persistenceController.container.viewContext)
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            TodoScreen(
+                viewModel: TodoVM(repo: repository)
+            )
+            .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

@@ -32,6 +32,5 @@ struct ErrorView: View {
                 .stroke(Color.red.opacity(0.2), lineWidth: 1)
         )
         .padding(.horizontal)
-//        .transition(.move(edge: .top).combined(with: .opacity)) // Smooth entrance
     }
 }

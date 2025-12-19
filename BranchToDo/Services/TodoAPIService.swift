@@ -7,10 +7,9 @@
 
 import Foundation
 
-class TodoAPIService {
+enum TodoAPIService {
     
     static func fetchTodos() async throws -> [TodoDTO] {
-        throw TodoNetworkError.networkInvalidResponse
         let session = URLSession(configuration: URLSessionConfiguration.default)
         let requestConfig = JSONRequestConfig(retries: 2)
         

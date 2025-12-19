@@ -98,6 +98,53 @@
 			<key>type</key>
 			<string>bookmark</string>
 		</dict>
+		<dict>
+			<key>destination</key>
+			<dict>
+				<key>location-parameters</key>
+				<dict>
+					<key>EndingColumnNumber</key>
+					<string>0</string>
+					<key>EndingLineNumber</key>
+					<string>54</string>
+					<key>StartingColumnNumber</key>
+					<string>0</string>
+					<key>StartingLineNumber</key>
+					<string>53</string>
+					<key>Timestamp</key>
+					<string>787880233.575738</string>
+				</dict>
+				<key>rebasable-url</key>
+				<dict>
+					<key>base</key>
+					<string>workspace</string>
+					<key>payload</key>
+					<dict>
+						<key>relative-path</key>
+						<string>BranchToDo/Data/Persistence.swift</string>
+					</dict>
+				</dict>
+			</dict>
+			<key>text-context</key>
+			<dict>
+				<key>focused</key>
+				<string>                fatalError("Unresolved error \(error), \(error.userInfo)")
+</string>
+				<key>leading</key>
+				<string>                 Check the error message to determine what the actual problem was.
+                 */
+</string>
+				<key>trailing</key>
+				<string>            }
+        })
+        container.viewContext.automaticallyMergesChangesFromParent = true
+</string>
+			</dict>
+			<key>title</key>
+			<string>Fix Fatal Error</string>
+			<key>type</key>
+			<string>bookmark</string>
+		</dict>
 	</array>
 </dict>
 </plist>

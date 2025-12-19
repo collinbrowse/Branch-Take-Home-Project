@@ -14,11 +14,11 @@ class TodoErrorLogger {
     
     static func logError(_ error: Error) {
         // Use modern OSLog Logger API which supports interpolation
-        logger.error("🚨 Todo error: \(error.localizedDescription, privacy: .public)")
+        logger.error("🚨 TODO: \(error.localizedDescription, privacy: .public)")
     }
     
     static func logMessage(_ message: String) {
-        logger.info("⚠️ Todo message \(message)")
+        logger.info("⚠️ TODO: \(message)")
     }
 }
 

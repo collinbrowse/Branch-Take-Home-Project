@@ -10,8 +10,24 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
     
+    /// PersistanceController for Xcode Previews
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
+        let viewContext = result.container.viewContext
+        for _ in 0..<10 {
+            let newTodo = Todo(context: viewContext)
+            newTodo.completed = false
+            newTodo.createdAt = Date.now
+            newTodo.id = Int32.randomInt32Id()
+            newTodo.title = ""
+            newTodo.userId = Int32.randomInt32Id()
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            TodoErrorLogger.logError(nsError)
+        }
         return result
     }()
 
@@ -40,6 +56,5 @@ struct PersistenceController {
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-
     }
 }
