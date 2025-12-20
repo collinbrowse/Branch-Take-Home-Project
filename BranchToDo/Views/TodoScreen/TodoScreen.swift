@@ -38,7 +38,7 @@ struct TodoScreen: View {
                 )
                 .ignoresSafeArea()
                 
-                if todos.isEmpty && !viewModel.isLoading {
+                if todos.isEmpty {
                     EmptyStateView(viewModel: viewModel)
                 } else {
                     ListView(viewModel: viewModel)

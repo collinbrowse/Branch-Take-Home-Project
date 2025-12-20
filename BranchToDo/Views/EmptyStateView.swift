@@ -15,8 +15,8 @@ struct EmptyStateView: View {
     var body: some View {
         VStack(spacing: 25) {
             Group {
-                Text("You don't have any todo's yet")
-                Text("Start by tapping the + button in the top right")
+                Text("You don't have anything on your list yet")
+                Text("Add a new item")
                 Text("OR")
             }
             .font(.headline)
@@ -26,14 +26,23 @@ struct EmptyStateView: View {
                 // One time call to populate core data with demo todos
                 viewModel.fetchDemoTodos()
             } label: {
-                Text("Load Demo Todo Items")
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 5)
+                ZStack {
+                    Text("Load Demo Todo Items")
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 5)
+                        .opacity(viewModel.isLoading ? 0 : 1)
+                    
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                    }
+                }
             }
             .buttonStyle(.glass)
             .disabled(viewModel.isLoading)
+            .animation(.default, value: viewModel.isLoading)
             
             if let errorString = viewModel.errorMessage {
                 ErrorView(message: errorString)
