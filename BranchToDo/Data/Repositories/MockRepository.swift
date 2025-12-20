@@ -82,7 +82,7 @@ class MockRepository: TodoRepositoryProtocol {
         }
         
         guard let todoItem = todos[id] else {
-            throw NSError(domain: "MockRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+            throw TodoCoreDataError.notFound(id: id)
         }
         
         return todoItem
@@ -97,7 +97,7 @@ class MockRepository: TodoRepositoryProtocol {
         }
         
         guard var todoItem = todos[id] else {
-            throw NSError(domain: "MockRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+            throw TodoCoreDataError.notFound(id: id)
         }
         
         // Update our in-memory domain model (no Core Data)
@@ -114,7 +114,7 @@ class MockRepository: TodoRepositoryProtocol {
         }
         
         guard var todoItem = todos[id] else {
-            throw NSError(domain: "MockRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+            throw TodoCoreDataError.notFound(id: id)
         }
         
         // Update our in-memory domain model (no Core Data)
@@ -131,7 +131,7 @@ class MockRepository: TodoRepositoryProtocol {
         }
         
         guard todos[id] != nil else {
-            throw NSError(domain: "MockRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+            throw TodoCoreDataError.notFound(id: id)
         }
         
         // Remove from our in-memory dictionary (no Core Data)

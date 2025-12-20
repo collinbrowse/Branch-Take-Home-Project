@@ -65,7 +65,7 @@ class CoreDataRepository: TodoRepositoryProtocol {
         request.fetchLimit = 1
         
         guard let todo = try context.fetch(request).first else {
-            throw NSError(domain: "CoreDataRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+            throw TodoCoreDataError.notFound(id: id)
         }
         
         return TodoItem(
@@ -90,7 +90,7 @@ class CoreDataRepository: TodoRepositoryProtocol {
         request.fetchLimit = 1
         
         guard let todo = try context.fetch(request).first else {
-            throw NSError(domain: "CoreDataRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+            throw TodoCoreDataError.notFound(id: id)
         }
         
         todo.title = title
@@ -108,7 +108,7 @@ class CoreDataRepository: TodoRepositoryProtocol {
         request.fetchLimit = 1
         
         guard let todo = try context.fetch(request).first else {
-            throw NSError(domain: "CoreDataRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+            throw TodoCoreDataError.notFound(id: id)
         }
         
         todo.completed.toggle()
@@ -126,7 +126,7 @@ class CoreDataRepository: TodoRepositoryProtocol {
         request.fetchLimit = 1
         
         guard let todo = try context.fetch(request).first else {
-            throw NSError(domain: "CoreDataRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+            throw TodoCoreDataError.notFound(id: id)
         }
         
         context.delete(todo)

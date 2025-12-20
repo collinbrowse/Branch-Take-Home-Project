@@ -76,8 +76,8 @@ final class CoreDataRepositoryTests: TodoTests {
     func testGetTodo_WithInvalidId_ThrowsError() throws {
         // ACT & ASSERT
         XCTAssertThrowsError(try coreDataRepository.getTodo(id: 99999)) { error in
-            let nsError = error as NSError
-            XCTAssertEqual(nsError.code, 404, "Should throw 404 error for not found")
+            let coreDataError = error as? TodoCoreDataError
+            XCTAssertEqual(coreDataError, TodoCoreDataError.notFound(id: 99999), "Should throw notFound error")
         }
     }
     
@@ -222,24 +222,24 @@ final class CoreDataRepositoryTests: TodoTests {
     func testUpdateTodoTitle_WithInvalidId_ThrowsError() throws {
         // ACT & ASSERT
         XCTAssertThrowsError(try coreDataRepository.updateTodoTitle(id: 99999, title: "Test")) { error in
-            let nsError = error as NSError
-            XCTAssertEqual(nsError.code, 404, "Should throw 404 for not found")
+            let coreDataError = error as? TodoCoreDataError
+            XCTAssertEqual(coreDataError, TodoCoreDataError.notFound(id: 99999), "Should throw notFound error")
         }
     }
     
     func testToggleCompletion_WithInvalidId_ThrowsError() throws {
         // ACT & ASSERT
         XCTAssertThrowsError(try coreDataRepository.toggleCompletion(id: 99999)) { error in
-            let nsError = error as NSError
-            XCTAssertEqual(nsError.code, 404, "Should throw 404 for not found")
+            let coreDataError = error as? TodoCoreDataError
+            XCTAssertEqual(coreDataError, TodoCoreDataError.notFound(id: 99999), "Should throw notFound error")
         }
     }
     
     func testDeleteTodo_WithInvalidId_ThrowsError() throws {
         // ACT & ASSERT
         XCTAssertThrowsError(try coreDataRepository.deleteTodo(id: 99999)) { error in
-            let nsError = error as NSError
-            XCTAssertEqual(nsError.code, 404, "Should throw 404 for not found")
+            let coreDataError = error as? TodoCoreDataError
+            XCTAssertEqual(coreDataError, TodoCoreDataError.notFound(id: 99999), "Should throw notFound error")
         }
     }
 }
