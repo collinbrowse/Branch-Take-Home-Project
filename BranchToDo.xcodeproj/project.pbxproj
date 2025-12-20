@@ -14,19 +14,11 @@
 			remoteGlobalIDString = BE3D2DD72EF3128000B4DF51;
 			remoteInfo = BranchToDo;
 		};
-		BE3D2DF52EF3128200B4DF51 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BE3D2DD02EF3128000B4DF51 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BE3D2DD72EF3128000B4DF51;
-			remoteInfo = BranchToDo;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		BE3D2DD82EF3128000B4DF51 /* BranchToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BranchToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE3D2DEA2EF3128200B4DF51 /* BranchToDoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BranchToDoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BE3D2DF42EF3128200B4DF51 /* BranchToDoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BranchToDoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -38,11 +30,6 @@
 		BE3D2DED2EF3128200B4DF51 /* BranchToDoTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = BranchToDoTests;
-			sourceTree = "<group>";
-		};
-		BE3D2DF72EF3128200B4DF51 /* BranchToDoUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BranchToDoUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -62,13 +49,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BE3D2DF12EF3128200B4DF51 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -77,7 +57,6 @@
 			children = (
 				BE3D2DDA2EF3128000B4DF51 /* BranchToDo */,
 				BE3D2DED2EF3128200B4DF51 /* BranchToDoTests */,
-				BE3D2DF72EF3128200B4DF51 /* BranchToDoUITests */,
 				BE3D2DD92EF3128000B4DF51 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,7 +66,6 @@
 			children = (
 				BE3D2DD82EF3128000B4DF51 /* BranchToDo.app */,
 				BE3D2DEA2EF3128200B4DF51 /* BranchToDoTests.xctest */,
-				BE3D2DF42EF3128200B4DF51 /* BranchToDoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,29 +118,6 @@
 			productReference = BE3D2DEA2EF3128200B4DF51 /* BranchToDoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		BE3D2DF32EF3128200B4DF51 /* BranchToDoUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BE3D2E042EF3128200B4DF51 /* Build configuration list for PBXNativeTarget "BranchToDoUITests" */;
-			buildPhases = (
-				BE3D2DF02EF3128200B4DF51 /* Sources */,
-				BE3D2DF12EF3128200B4DF51 /* Frameworks */,
-				BE3D2DF22EF3128200B4DF51 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				BE3D2DF62EF3128200B4DF51 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				BE3D2DF72EF3128200B4DF51 /* BranchToDoUITests */,
-			);
-			name = BranchToDoUITests;
-			packageProductDependencies = (
-			);
-			productName = BranchToDoUITests;
-			productReference = BE3D2DF42EF3128200B4DF51 /* BranchToDoUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -177,10 +132,6 @@
 						CreatedOnToolsVersion = 26.2;
 					};
 					BE3D2DE92EF3128200B4DF51 = {
-						CreatedOnToolsVersion = 26.2;
-						TestTargetID = BE3D2DD72EF3128000B4DF51;
-					};
-					BE3D2DF32EF3128200B4DF51 = {
 						CreatedOnToolsVersion = 26.2;
 						TestTargetID = BE3D2DD72EF3128000B4DF51;
 					};
@@ -202,7 +153,6 @@
 			targets = (
 				BE3D2DD72EF3128000B4DF51 /* BranchToDo */,
 				BE3D2DE92EF3128200B4DF51 /* BranchToDoTests */,
-				BE3D2DF32EF3128200B4DF51 /* BranchToDoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -216,13 +166,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BE3D2DE82EF3128200B4DF51 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BE3D2DF22EF3128200B4DF51 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -246,13 +189,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BE3D2DF02EF3128200B4DF51 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -260,11 +196,6 @@
 			isa = PBXTargetDependency;
 			target = BE3D2DD72EF3128000B4DF51 /* BranchToDo */;
 			targetProxy = BE3D2DEB2EF3128200B4DF51 /* PBXContainerItemProxy */;
-		};
-		BE3D2DF62EF3128200B4DF51 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BE3D2DD72EF3128000B4DF51 /* BranchToDo */;
-			targetProxy = BE3D2DF52EF3128200B4DF51 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -527,56 +458,6 @@
 			};
 			name = Release;
 		};
-		BE3D2E052EF3128200B4DF51 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 84XX2W7G34;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.collinbrowse.BranchToDoUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = BranchToDo;
-				XROS_DEPLOYMENT_TARGET = 26.2;
-			};
-			name = Debug;
-		};
-		BE3D2E062EF3128200B4DF51 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 84XX2W7G34;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				MACOSX_DEPLOYMENT_TARGET = 26.1;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.collinbrowse.BranchToDoUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = BranchToDo;
-				XROS_DEPLOYMENT_TARGET = 26.2;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -603,15 +484,6 @@
 			buildConfigurations = (
 				BE3D2E022EF3128200B4DF51 /* Debug */,
 				BE3D2E032EF3128200B4DF51 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BE3D2E042EF3128200B4DF51 /* Build configuration list for PBXNativeTarget "BranchToDoUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BE3D2E052EF3128200B4DF51 /* Debug */,
-				BE3D2E062EF3128200B4DF51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
