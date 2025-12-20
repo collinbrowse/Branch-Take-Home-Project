@@ -11,15 +11,20 @@ import CoreData
 struct TodoScreen: View {
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(
-        sortDescriptors: [],
-        animation: .default
-    ) private var allTodos: FetchedResults<Todo>
+    
+    @FetchRequest var todos: FetchedResults<Todo>
     
     @StateObject private var viewModel: TodoVM
 
     init(viewModel: TodoVM) {
         _viewModel = StateObject(wrappedValue: viewModel)
+        
+        // Just check existence of any todo
+        let request: NSFetchRequest<Todo> = Todo.fetchRequest()
+        request.sortDescriptors = []
+        request.fetchLimit = 1
+        request.includesPropertyValues = false
+        _todos = FetchRequest(fetchRequest: request)
     }
     
     var body: some View {
@@ -33,7 +38,7 @@ struct TodoScreen: View {
                 )
                 .ignoresSafeArea()
                 
-                if allTodos.isEmpty && !viewModel.isLoading {
+                if todos.isEmpty && !viewModel.isLoading {
                     EmptyStateView(viewModel: viewModel)
                 } else {
                     ListView(viewModel: viewModel)
