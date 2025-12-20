@@ -17,7 +17,7 @@ struct BranchToDoApp: App {
     
     init() {
         container = PersistenceController.shared.container
-        repository = CoreDataRepository(container: container, userId: ToDoConstants.userId) // replace userId with auth solution
+        repository = CoreDataRepository(container: container, userId: TodoConstants.userId) // replace userId with auth solution
     }
     
     var body: some Scene {

@@ -9,8 +9,8 @@ import Foundation
 
 struct JSONRequestConfig {
     /// the part after the domain
-    var path: String = ToDoConstants.todosPath
-    var endpointURL: String = ToDoConstants.apiURL
+    var path: String = TodoConstants.todosPath
+    var endpointURL: String = TodoConstants.apiURL
     var method: String = "GET"
     /// iOS 13+ prevents get request from having a body
     var body: [String: Any]?

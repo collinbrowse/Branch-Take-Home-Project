@@ -9,11 +9,11 @@ import CoreData
 import SwiftUI
 
 protocol TodoRepositoryProtocol {
-    @MainActor func createEmptyTodo() throws -> NSManagedObjectID
-    @MainActor func getTodo(objectId: NSManagedObjectID) throws -> Todo
-    @MainActor func updateTodoTitle(objectId: NSManagedObjectID, title: String) throws
-    @MainActor func toggleCompletion(objectId: NSManagedObjectID) throws
-    @MainActor func deleteTodo(objectId: NSManagedObjectID) throws
+    @MainActor func createEmptyTodo() throws -> TodoItem
+    @MainActor func getTodo(id: Int32) throws -> TodoItem
+    @MainActor func updateTodoTitle(id: Int32, title: String) throws
+    @MainActor func toggleCompletion(id: Int32) throws
+    @MainActor func deleteTodo(id: Int32) throws
     @MainActor func save() throws
     func batchUpsert(_ dtos: [TodoDTO]) async throws
     func fetchDemoTodosAndSave() async throws
@@ -32,9 +32,9 @@ class CoreDataRepository: TodoRepositoryProtocol {
     
     /// Add a todo to the view context with default values
     /// Use when creating an empty todo for the user
-    /// - Returns: The id of the new todo
+    /// - Returns: The domain model TodoItem
     @MainActor
-    func createEmptyTodo() throws -> NSManagedObjectID {
+    func createEmptyTodo() throws -> TodoItem {
         let context = container.viewContext
         let newTodo = Todo(context: context)
         newTodo.completed = false
@@ -42,50 +42,93 @@ class CoreDataRepository: TodoRepositoryProtocol {
         newTodo.id = Int32.randomInt32Id()
         newTodo.title = ""
         newTodo.userId = userId
-        return newTodo.objectID
+        
+        // Convert to domain model
+        return TodoItem(
+            id: newTodo.id,
+            title: newTodo.title ?? "",
+            completed: newTodo.completed,
+            createdAt: newTodo.createdAt,
+            userId: newTodo.userId
+        )
     }
     
     /// Find and return a todo from the view context
     /// - Parameters:
-    ///   - objectId: The id of the todo
-    /// - Returns: The NSManagedObject - Todo
+    ///   - id: The id of the todo
+    /// - Returns: The domain model TodoItem
     @MainActor
-    func getTodo(objectId: NSManagedObjectID) throws -> Todo {
+    func getTodo(id: Int32) throws -> TodoItem {
         let context = container.viewContext
-        return try context.existingObject(with: objectId) as! Todo
+        let request: NSFetchRequest<Todo> = Todo.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %d", id)
+        request.fetchLimit = 1
+        
+        guard let todo = try context.fetch(request).first else {
+            throw NSError(domain: "CoreDataRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+        }
+        
+        return TodoItem(
+            id: todo.id,
+            title: todo.title ?? "",
+            completed: todo.completed,
+            createdAt: todo.createdAt,
+            userId: todo.userId
+        )
     }
     
     /// Update the title of a todo in the view context
     /// DOES NOT save the view context
     /// - Parameters:
-    ///   - objectId: the id of the todo
+    ///   - id: the id of the todo
     ///   - title: the new title (or name) of the todo
     @MainActor
-    func updateTodoTitle(objectId: NSManagedObjectID, title: String) throws {
+    func updateTodoTitle(id: Int32, title: String) throws {
         let context = container.viewContext
-        let todo = try context.existingObject(with: objectId) as! Todo
+        let request: NSFetchRequest<Todo> = Todo.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %d", id)
+        request.fetchLimit = 1
+        
+        guard let todo = try context.fetch(request).first else {
+            throw NSError(domain: "CoreDataRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+        }
+        
         todo.title = title
     }
     
-    /// Toggle the compled value of a todo in the view context
+    /// Toggle the completed value of a todo in the view context
     /// DOES NOT save the view context
     /// - Parameters:
-    ///   - objectId: the id of the todo
+    ///   - id: the id of the todo
     @MainActor
-    func toggleCompletion(objectId: NSManagedObjectID) throws {
+    func toggleCompletion(id: Int32) throws {
         let context = container.viewContext
-        let todo = try context.existingObject(with: objectId) as! Todo
+        let request: NSFetchRequest<Todo> = Todo.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %d", id)
+        request.fetchLimit = 1
+        
+        guard let todo = try context.fetch(request).first else {
+            throw NSError(domain: "CoreDataRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+        }
+        
         todo.completed.toggle()
     }
     
     /// Remove a todo item with an id in the view context
     /// DOES NOT save the view context
     /// - Parameters:
-    ///   - objectId: the id of the todo
+    ///   - id: the id of the todo
     @MainActor
-    func deleteTodo(objectId: NSManagedObjectID) throws {
+    func deleteTodo(id: Int32) throws {
         let context = container.viewContext
-        let todo = try context.existingObject(with: objectId)
+        let request: NSFetchRequest<Todo> = Todo.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %d", id)
+        request.fetchLimit = 1
+        
+        guard let todo = try context.fetch(request).first else {
+            throw NSError(domain: "CoreDataRepository", code: 404, userInfo: [NSLocalizedDescriptionKey: "Todo not found"])
+        }
+        
         context.delete(todo)
     }
     

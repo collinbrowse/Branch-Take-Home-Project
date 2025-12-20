@@ -37,20 +37,31 @@ struct ListView: View {
                 TodoItemView(
                     todo: todo,
                     viewModel: viewModel,
-                    isCurrentTodo: todo.objectID == viewModel.currentTodoId,
+                    isCurrentTodo: todo.id == viewModel.currentTodoId,
                     onToggleCompletion: {
-                        viewModel.toggleCompletion(objectId: todo.objectID)
+                        viewModel.toggleCompletion(id: todo.id)
                     }
                 )
             }
             .onDelete { offsets in
                 for index in offsets {
                     let todo = allTodos[index]
-                    viewModel.deleteTodo(objectId: todo.objectID)
+                    viewModel.deleteTodo(id: todo.id)
                 }
             }
         }
         .scrollContentBackground(.hidden)
+        .safeAreaInset(edge: .top, spacing: 10) {
+            // Add to error view to safe area so SwiftUI doesn't hide navigation title when displaying
+            if let errorString = viewModel.errorMessage {
+                ErrorView(message: errorString)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .top).combined(with: .opacity),
+                        removal: .opacity.combined(with: .scale(scale: 0.9))
+                    ))
+                    .background(Color.clear) // Ensure it doesn't interfere with navigation bar
+            }
+        }
     }
 }
 
@@ -63,7 +74,7 @@ private let itemFormatter: DateFormatter = {
 
 #Preview {
     let container = PersistenceController.preview.container
-    let repo = CoreDataRepository(container: container, userId: ToDoConstants.userId)
+    let repo = CoreDataRepository(container: container, userId: TodoConstants.userId)
     let vm = TodoVM(repo: repo)
     ListView(viewModel: vm)
         .environment(\.managedObjectContext, container.viewContext)

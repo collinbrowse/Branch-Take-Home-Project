@@ -8,12 +8,11 @@
 
 import SwiftUI
 import Combine
-import CoreData
 
 @MainActor
 class TodoVM: ObservableObject {
     
-    @Published var currentTodoId: NSManagedObjectID?
+    @Published var currentTodoId: Int32?
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     @Published var isEditing: Bool = false {
@@ -28,27 +27,32 @@ class TodoVM: ObservableObject {
     }
     @Published var newTitle: String? {
         didSet {
-            // Update the todo title in Core Data as user types
+            // Update the todo title as user types
             if let title = newTitle,
-                let objectId = currentTodoId {
-                updateTodoTitle(objectId: objectId, title: title)
+                let todoId = currentTodoId {
+                updateTodoTitle(id: todoId, title: title)
             }
         }
     }
     
     private var repository: TodoRepositoryProtocol
+    private var fetchTask: Task<Void, Never>?
     
     init(repo: TodoRepositoryProtocol) {
         self.repository = repo
+    }
+    
+    deinit {
+        fetchTask?.cancel()
     }
 
     // MARK: - CRUD Operations
     
     func addEmptyTodo() {
         do {
-            let objectID = try repository.createEmptyTodo()
-            currentTodoId = objectID
-            newTitle = ""
+            let todoItem = try repository.createEmptyTodo()
+            currentTodoId = todoItem.id
+            newTitle = todoItem.title
         } catch {
             TodoErrorLogger.logMessage("Error creating empty todo: \(error.localizedDescription)")
             withAnimation(.easeInOut) {
@@ -59,15 +63,15 @@ class TodoVM: ObservableObject {
     }
     
     func finishEditing() {
-        if let objectId = currentTodoId {
+        if let todoId = currentTodoId {
             do {
-                let todo = try repository.getTodo(objectId: objectId)
+                let todoItem = try repository.getTodo(id: todoId)
                 // If it's a valid title (not an empty string)
-                if let title = todo.title, !title.trimmingCharacters(in: .whitespaces).isEmpty {
-                    // Save the view context to persist the new todo
+                if !todoItem.title.trimmingCharacters(in: .whitespaces).isEmpty {
+                    // Save to persist the new todo
                     try repository.save()
                 } else {
-                    try repository.deleteTodo(objectId: objectId)
+                    try repository.deleteTodo(id: todoId)
                     try repository.save()
                 }
             } catch {
@@ -84,9 +88,9 @@ class TodoVM: ObservableObject {
         errorMessage = nil
     }
     
-    func deleteTodo(objectId: NSManagedObjectID) {
+    func deleteTodo(id: Int32) {
         do {
-            try repository.deleteTodo(objectId: objectId)
+            try repository.deleteTodo(id: id)
             try repository.save()
         } catch {
             TodoErrorLogger.logMessage("Error deleting the todo: \(error.localizedDescription)")
@@ -97,9 +101,9 @@ class TodoVM: ObservableObject {
         }
     }
     
-    func toggleCompletion(objectId: NSManagedObjectID) {
+    func toggleCompletion(id: Int32) {
         do {
-            try repository.toggleCompletion(objectId: objectId)
+            try repository.toggleCompletion(id: id)
             try repository.save()
         } catch {
             TodoErrorLogger.logMessage("Error updating the todo completion status: \(error.localizedDescription)")
@@ -110,17 +114,17 @@ class TodoVM: ObservableObject {
         }
     }
     
-    func updateTodoTitle(objectId: NSManagedObjectID, title: String) {
-        // Valdiate the input first
+    func updateTodoTitle(id: Int32, title: String) {
+        // Validate the input first
         let sanitizedTitle = TitleSanitizer.sanitize(title)
-        guard sanitizedTitle != "" else {
+        if sanitizedTitle == "" && title != "" {
             errorMessage = "Please enter a valid input"
             return
         }
         
-        // Save if valid
+        // Update if valid
         do {
-            try repository.updateTodoTitle(objectId: objectId, title: title)
+            try repository.updateTodoTitle(id: id, title: title)
         } catch {
             TodoErrorLogger.logMessage("Error updating todo title: \(error.localizedDescription)")
         }
@@ -128,13 +132,15 @@ class TodoVM: ObservableObject {
     
     /// Fetch a list of Demo Todos from the network
     func fetchDemoTodos() {
-        Task {
+        fetchTask?.cancel()
+        fetchTask = Task {
             isLoading = true
             errorMessage = nil
             do {
                 try await repository.fetchDemoTodosAndSave()
                 isLoading = false
             } catch {
+                guard !Task.isCancelled else { return }
                 TodoErrorLogger.logMessage("Error getting the todos: \(error.localizedDescription)")
                 withAnimation(.easeInOut) {
                     self.errorMessage = "Unable to load examples from the network: \(error.localizedDescription)"
