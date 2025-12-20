@@ -63,7 +63,7 @@ private let itemFormatter: DateFormatter = {
 
 #Preview {
     let container = PersistenceController.preview.container
-    let repo = CoreDataRepository(container: container)
+    let repo = CoreDataRepository(container: container, userId: ToDoConstants.userId)
     let vm = TodoVM(repo: repo)
     ListView(viewModel: vm)
         .environment(\.managedObjectContext, container.viewContext)

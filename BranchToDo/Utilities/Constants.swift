@@ -8,4 +8,5 @@
 class ToDoConstants {
     static var apiURL = "https://jsonplaceholder.typicode.com"
     static var todosPath = "/todos"
+    static var userId: Int32 = 1234567890
 }

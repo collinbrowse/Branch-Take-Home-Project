@@ -62,6 +62,6 @@ struct TodoScreen: View {
 
 #Preview {
     let container = PersistenceController.preview.container
-    TodoScreen(viewModel: TodoVM(repo: CoreDataRepository(container: container)))
+    TodoScreen(viewModel: TodoVM(repo: CoreDataRepository(container: container, userId: ToDoConstants.userId)))
 }
 

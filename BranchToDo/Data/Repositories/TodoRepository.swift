@@ -23,9 +23,11 @@ protocol TodoRepositoryProtocol {
 class CoreDataRepository: TodoRepositoryProtocol {
     
     private let container: NSPersistentContainer
+    private let userId: Int32
     
-    init(container: NSPersistentContainer) {
+    init(container: NSPersistentContainer, userId: Int32) {
         self.container = container
+        self.userId = userId
     }
     
     /// Add a todo to the view context with default values
@@ -39,7 +41,7 @@ class CoreDataRepository: TodoRepositoryProtocol {
         newTodo.createdAt = Date.now
         newTodo.id = Int32.randomInt32Id()
         newTodo.title = ""
-        newTodo.userId = Int32.randomInt32Id()
+        newTodo.userId = userId
         return newTodo.objectID
     }
     

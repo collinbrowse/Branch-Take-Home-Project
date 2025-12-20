@@ -43,7 +43,7 @@ struct EmptyStateView: View {
 
 #Preview {
     let container = PersistenceController.preview.container
-    let repo = CoreDataRepository(container: container)
+    let repo = CoreDataRepository(container: container, userId: ToDoConstants.userId)
     let vm = TodoVM(repo: repo)
     EmptyStateView(viewModel: vm)
 }
