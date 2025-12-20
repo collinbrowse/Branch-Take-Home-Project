@@ -14,21 +14,25 @@ struct EmptyStateView: View {
     
     var body: some View {
         VStack(spacing: 25) {
-            Text("You don't have any todo's yet")
-                .font(.headline)
-                
-            Text("Start by tapping the + button in the top right")
-                .font(.headline)
-            Text("OR")
-                .font(.headline)
+            Group {
+                Text("You don't have any todo's yet")
+                Text("Start by tapping the + button in the top right")
+                Text("OR")
+            }
+            .font(.headline)
+            .foregroundStyle(.black)
+            
             Button {
                 // One time call to populate core data with demo todos
                 viewModel.fetchDemoTodos()
             } label: {
                 Text("Load Demo Todo Items")
+                    .font(.headline)
                     .foregroundStyle(.primary)
+                    .padding(.vertical, 5)
+                    .padding(.horizontal, 5)
             }
-            .buttonStyle(LiquidGlassButtonStyle(isLoading: viewModel.isLoading))
+            .buttonStyle(.glass)
             .disabled(viewModel.isLoading)
             
             if let errorString = viewModel.errorMessage {
@@ -38,7 +42,8 @@ struct EmptyStateView: View {
                         removal: .opacity.combined(with: .scale(scale: 0.9))
                     ))
             }
-        }.foregroundStyle(.black)
+        }
+            .multilineTextAlignment(.center)
     }
 }
 

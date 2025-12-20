@@ -59,7 +59,6 @@ struct TodoScreen: View {
                         }
                     }
                     .accessibilityLabel(viewModel.isEditing ? "Add" : "Edit")
-                    .tint(.black)
                 }
             }
             .navigationTitle("Todos")
