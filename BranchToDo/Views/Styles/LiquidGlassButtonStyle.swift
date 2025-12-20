@@ -13,7 +13,7 @@ struct LiquidGlassButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .fontWeight(.semibold)
-            .foregroundColor(.primary)
+            .foregroundColor(.black)
             .opacity(isLoading ? 0 : 1) // Hide text when loading
             .padding(.horizontal, 30)
             .padding(.vertical, 12)
@@ -39,7 +39,7 @@ struct LiquidGlassButtonStyle: ButtonStyle {
                     // 3. The Loading Indicator
                     if isLoading {
                         ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .primary))
+                            .progressViewStyle(CircularProgressViewStyle(tint: .black))
                             .transition(.opacity)
                     }
                 }

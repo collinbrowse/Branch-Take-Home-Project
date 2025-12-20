@@ -18,7 +18,7 @@ struct ErrorView: View {
                 .font(.system(size: 20))
             Text(message)
                 .font(.subheadline)
-                .foregroundColor(.primary)
+                .foregroundColor(.black)
                 .fixedSize(horizontal: false, vertical: true) // Prevents text truncation
             Spacer()
         }

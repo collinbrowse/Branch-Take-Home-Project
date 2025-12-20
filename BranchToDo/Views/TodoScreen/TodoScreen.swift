@@ -26,7 +26,8 @@ struct TodoScreen: View {
         NavigationStack {
             ZStack {
                 LinearGradient(
-                    colors: [Color(red: 0.4, green: 0.6, blue: 1.0), .white],
+                    // Branch's RGB from their website
+                    colors: [Color(red: 0.137254902, green: 0.5137254902, blue: 0.2392156863), .white],
                     startPoint: .top,
                     endPoint: .bottom
                 )
@@ -53,9 +54,11 @@ struct TodoScreen: View {
                         }
                     }
                     .accessibilityLabel(viewModel.isEditing ? "Add" : "Edit")
+                    .tint(.black)
                 }
             }
             .navigationTitle("Todos")
+            
         }
     }
 }

@@ -16,6 +16,7 @@ struct EmptyStateView: View {
         VStack(spacing: 25) {
             Text("You don't have any todo's yet")
                 .font(.headline)
+                
             Text("Start by tapping the + button in the top right")
                 .font(.headline)
             Text("OR")
@@ -37,7 +38,7 @@ struct EmptyStateView: View {
                         removal: .opacity.combined(with: .scale(scale: 0.9))
                     ))
             }
-        }
+        }.foregroundStyle(.black)
     }
 }
 
