@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BE99E58A2EF91127001D4D37 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = BE99E5892EF91123001D4D37 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		BE3D2DEB2EF3128200B4DF51 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -19,6 +23,7 @@
 /* Begin PBXFileReference section */
 		BE3D2DD82EF3128000B4DF51 /* BranchToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BranchToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE3D2DEA2EF3128200B4DF51 /* BranchToDoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BranchToDoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE99E5892EF91123001D4D37 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -58,6 +63,7 @@
 				BE3D2DDA2EF3128000B4DF51 /* BranchToDo */,
 				BE3D2DED2EF3128200B4DF51 /* BranchToDoTests */,
 				BE3D2DD92EF3128000B4DF51 /* Products */,
+				BE99E5892EF91123001D4D37 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -179,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE99E58A2EF91127001D4D37 /* README.md in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
