@@ -9,6 +9,7 @@ import CoreData
 import SwiftUI
 
 /// An abstraction layer for managing data of to-dos
+/// This repostiory operates in a transactional flow: make changes, validate, then commit
 protocol TodoRepositoryProtocol {
     @MainActor func createEmptyTodo() throws -> TodoItem
     @MainActor func getTodo(id: Int32) throws -> TodoItem
@@ -21,6 +22,9 @@ protocol TodoRepositoryProtocol {
     
 }
 
+
+/// Making a change does not save to the persistent store.
+/// Call save() to persist changes
 class CoreDataRepository: TodoRepositoryProtocol {
     
     private let container: NSPersistentContainer

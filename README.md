@@ -70,6 +70,9 @@ Given more time or a larger application scope, I would:
 - Introduce a reusable `EmptyStateView`
 - Revisit some constants and potentially group them under manager-style abstractions
 - Add full VoiceOver support
+- Improve SOLID principles by moving data reads from `@FetchRequest` in the views to 
+    a `@Published var` in the ViewModel. The current setup violates DIP and SRP and means swapping data
+    sources would touch the view. 
 
 ---
 
