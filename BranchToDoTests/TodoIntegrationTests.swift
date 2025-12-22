@@ -21,7 +21,6 @@ final class TodoIntegrationTests: TodoTests {
     override func tearDownWithError() throws {
     }
     
-    // Convenience accessor for repository as CoreDataRepository
     var coreDataRepository: CoreDataRepository {
         return repository as! CoreDataRepository
     }

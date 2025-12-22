@@ -61,7 +61,7 @@ struct TodoScreen: View {
                     .accessibilityLabel(viewModel.isEditing ? "Add" : "Edit")
                 }
             }
-            .navigationTitle("Todos")
+            .navigationTitle("To-dos")
             
         }
     }

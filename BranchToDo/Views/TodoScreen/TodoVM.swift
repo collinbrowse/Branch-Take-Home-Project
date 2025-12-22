@@ -48,6 +48,8 @@ class TodoVM: ObservableObject {
 
     // MARK: - CRUD Operations
     
+    /// Add a todo item, but don't give it a title yet
+    /// Do not save the empty todo to the data store
     func addEmptyTodo() {
         do {
             let todoItem = try repository.createEmptyTodo()
@@ -62,6 +64,9 @@ class TodoVM: ObservableObject {
         }
     }
     
+    /// Save the updated to-do to the data store
+    /// If the to-do is empty, remove it
+    /// Reset the view state
     func finishEditing() {
         if let todoId = currentTodoId {
             do {
@@ -88,6 +93,9 @@ class TodoVM: ObservableObject {
         errorMessage = nil
     }
     
+    /// Remove the to-do item from the data store
+    /// - Parameters:
+    ///     - id: the id of the to-do item
     func deleteTodo(id: Int32) {
         do {
             try repository.deleteTodo(id: id)
@@ -101,12 +109,15 @@ class TodoVM: ObservableObject {
         }
     }
     
+    /// Toggle the completion status as save to the data store
+    /// - Parameters:
+    ///     - id: the id of the to-do item
     func toggleCompletion(id: Int32) {
         do {
             try repository.toggleCompletion(id: id)
             try repository.save()
         } catch {
-            TodoErrorLogger.logMessage("Error updating the todo completion status: \(error.localizedDescription)")
+            TodoErrorLogger.logMessage("Error updating the to-do completion status: \(error.localizedDescription)")
             withAnimation(.easeInOut) {
                 self.errorMessage = "Error updating your entry"
                 self.isLoading = false
@@ -114,6 +125,10 @@ class TodoVM: ObservableObject {
         }
     }
     
+    /// Update the todo title
+    /// Do not save to the data store
+    /// - Parameters:
+    ///     - id: the id of the to-do item
     func updateTodoTitle(id: Int32, title: String) {
         // Validate the input first
         let sanitizedTitle = TitleSanitizer.sanitize(title)
@@ -126,7 +141,7 @@ class TodoVM: ObservableObject {
         do {
             try repository.updateTodoTitle(id: id, title: title)
         } catch {
-            TodoErrorLogger.logMessage("Error updating todo title: \(error.localizedDescription)")
+            TodoErrorLogger.logMessage("Error updating to-do title: \(error.localizedDescription)")
         }
     }
     
@@ -141,7 +156,7 @@ class TodoVM: ObservableObject {
                 isLoading = false
             } catch {
                 guard !Task.isCancelled else { return }
-                TodoErrorLogger.logMessage("Error getting the todos: \(error.localizedDescription)")
+                TodoErrorLogger.logMessage("Error getting the to-dos: \(error.localizedDescription)")
                 withAnimation(.easeInOut) {
                     self.errorMessage = "Unable to load examples from the network: \(error.localizedDescription)"
                     self.isLoading = false

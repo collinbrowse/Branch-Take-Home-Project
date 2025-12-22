@@ -11,6 +11,9 @@ import CoreData
 struct ListView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
+    
+    /// Sort all to-dos with a createdAt to the top
+    /// Then, sort by newest to older
     @FetchRequest(
         sortDescriptors: [
             NSSortDescriptor(keyPath: \Todo.createdAt, ascending: false)
@@ -18,7 +21,6 @@ struct ListView: View {
         predicate: NSPredicate(format: "createdAt != nil"),
         animation: .default
     ) private var todosWithDates: FetchedResults<Todo>
-    
     @FetchRequest(
         sortDescriptors: [],
         predicate: NSPredicate(format: "createdAt == nil"),
@@ -43,7 +45,7 @@ struct ListView: View {
                     }
                 )
             }
-            .onDelete { offsets in
+            .onDelete { offsets in // swipe-to-delete
                 for index in offsets {
                     let todo = allTodos[index]
                     viewModel.deleteTodo(id: todo.id)

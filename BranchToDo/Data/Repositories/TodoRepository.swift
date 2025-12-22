@@ -8,6 +8,7 @@
 import CoreData
 import SwiftUI
 
+/// An abstraction layer for managing data of to-dos
 protocol TodoRepositoryProtocol {
     @MainActor func createEmptyTodo() throws -> TodoItem
     @MainActor func getTodo(id: Int32) throws -> TodoItem

@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 
+/// EmptyStateView is unique to the list of to-do items
 struct EmptyStateView: View {
     
     @ObservedObject var viewModel: TodoVM
@@ -27,7 +28,7 @@ struct EmptyStateView: View {
                 viewModel.fetchDemoTodos()
             } label: {
                 ZStack {
-                    Text("Load Demo Todo Items")
+                    Text("Load Demo To-do Items")
                         .font(.headline)
                         .foregroundStyle(.primary)
                         .padding(.vertical, 5)

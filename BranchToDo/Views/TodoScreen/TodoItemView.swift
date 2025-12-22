@@ -26,6 +26,7 @@ struct TodoItemView: View {
     var body: some View {
         
         HStack(alignment: .center, spacing: 8) {
+            // A toggle button for completion status
             Button {
                 onToggleCompletion()
             } label: {
@@ -56,7 +57,7 @@ struct TodoItemView: View {
                 }
                 // Else, Display the title as Text
                 else {
-                    Text(todo.title ?? "New Todo")
+                    Text(todo.title ?? "New To-do")
                         .font(.headline)
                         .strikethrough(todo.completed)
                     

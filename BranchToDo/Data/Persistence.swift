@@ -10,7 +10,7 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
     
-    /// PersistanceController for Xcode Previews
+    /// PersistenceController for Xcode Previews
     static let preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
@@ -31,12 +31,14 @@ struct PersistenceController {
         return result
     }()
 
-    let container: NSPersistentContainer
+    
     // Add a shared model to prevent conflicts
-        private static let sharedModel: NSManagedObjectModel = {
-            let modelURL = Bundle.main.url(forResource: "BranchToDo", withExtension: "momd")!
-            return NSManagedObjectModel(contentsOf: modelURL)!
-        }()
+    private static let sharedModel: NSManagedObjectModel = {
+        let modelURL = Bundle.main.url(forResource: "BranchToDo", withExtension: "momd")!
+        return NSManagedObjectModel(contentsOf: modelURL)!
+    }()
+    let container: NSPersistentContainer
+    
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "BranchToDo", managedObjectModel: Self.sharedModel)
         
@@ -51,12 +53,12 @@ struct PersistenceController {
             }
             semaphore.wait()
             if let error = loadError as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                TodoErrorLogger.logError(error)
             }
         } else {
             container.loadPersistentStores(completionHandler: { (storeDescription, error) in
                 if let error = error as NSError? {
-                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                    TodoErrorLogger.logError(error)
                 }
             })
         }

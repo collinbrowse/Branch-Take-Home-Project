@@ -9,11 +9,10 @@ import os
 import Foundation
 
 class TodoErrorLogger {
-    // Use modern OSLog Logger API which supports interpolation
+    // Use modern OSLog Logger API
     static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "BranchToDo", category: "Networking")
     
     static func logError(_ error: Error) {
-        // Use modern OSLog Logger API which supports interpolation
         logger.error("🚨 TODO: \(error.localizedDescription, privacy: .public)")
     }
     
